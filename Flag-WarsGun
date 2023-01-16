@@ -1,0 +1,24 @@
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local Closest
+
+local to0 = {"HeadshotCooldown", "MinSpread", "MaxSpread", "TotalRecoilMax", "RecoilMin", "RecoilMax", "RecoilDecay"}
+local toInf = {"CurrentAmmo", "AmmoCapacity",}
+local tosmall = {"ShotCooldown",}
+
+-- retarded gun mods (re-equip your weapon)
+local old2; old2 = hookmetamethod(game, "__index", function(this, index)
+   if not checkcaller() and index == "Value" then
+       if table.find(toInf, tostring(this)) then
+           return math.huge
+       end
+       if table.find(to0, tostring(this)) then
+           return 0
+       end
+       if table.find(tosmall, tostring(this)) then
+           return 0.07
+       end
+   end
+   return old2(this, index)
+end)
